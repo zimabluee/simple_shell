@@ -1,0 +1,77 @@
+.TH man 3 "28th August 2021" "0.1" "simple_shell man page"
+.SH NAME
+.B simple_shell
+- formatted output conversion
+.SH SYNOPSYS
+.B #include \fB"file.h"
+
+.B int _printf(const char *\fIformat\fB, ...);
+
+.SH DESCRIPTION
+\fB_printf()\fR is a variadic function that produces a string according to a
+.I format
+and prints it to the standard output, much like the C standard library function printf.
+It can receive a variable number of arguments.
+.sp
+.B Return value
+.in +2n
+Upon successful return, \fB_printf()\fR returns the number of characters
+printed (excluding the null byte used to end output to strings).If
+.I format
+is NULL or if the functions encounters any errors, it returns -1.
+.sp
+.B Format of the format string
+.in +2n
+The format string can contain any characters, just like a regular string, in double quotes,
+which will be printed as is. For example, _printf(\(dqHello\(dq) will print: Hello.
+However, this format string can contain
+.I conversion specifiers.
+These start with a %, and are followed with a character (see
+.I conversion specifiers
+). Special characters like a new line are escaped, for example _printf(\(dq\\n\(dq) will print a new line.
+.sp
+.B Conversion Specifiers
+.sp
+These are the characters that specify the type of the variable that needs to be printed. The variables to be printed are separated from the format string with a comma. Each variable passed to _printf need to have a conversion specifier.
+.sp
+.B i, d
+- Both these specifiers are for
+.I int
+arguments. They convert the variable to a decimal number, positive or negative.
+.sp
+.B c
+- Prints a
+.I single character.
+.sp
+.B s
+- Prints an entire
+.I string.
+.sp
+.B b
+- Prints a number in
+.I binary
+base.
+.sp
+.B %
+- Acts like an escape for the character %. To print \(dq%\(dq, the format string should contain \(dq%%\(dq.
+.sp
+.SH BUGS
+No known bugs, If one is found sent your report to \fIhttps://github.com/ChristianVaras\fR
+and \fIhttps://github.com/rayd1893\fR
+
+.SH SEE ALSO
+printf(3)
+
+The \fB_printf()\fR function emulates functionality of the C standard library
+function \fBprintf()\fR. This man page borrows from the corresponding Linux
+man page printf(3).
+.SH NOTES
+_printf uses a custom character printing function called _putchar, that uses the system call write().
+_putchar uses a static buffer of 1024 bytes and a static incrementing variable.
+That way, everytime _putchar is called inside _printf, the character is stored inside the buffer
+and the function moves to the next character,until _printf calls _putchar(-1),
+which \(dqflushes\(dq the buffer and resets the incrementing variable to 0.
+That way, _putchar only needs to call write one time, passing to it the whole buffer and the number
+of bytes in it, which is given by the value of the incrementing variable.
+.SH AUTHOR
+Yuri Quezada and Rayd Trujillo
